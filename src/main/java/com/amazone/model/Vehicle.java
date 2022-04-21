@@ -27,6 +27,6 @@ public class Vehicle {
     private VehicleType type;
 
     @Enumerated(EnumType.STRING)
-    private Condition vCondition;
+    private Condition vCondition = Condition.NO_ISSUES;
 
 }

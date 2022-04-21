@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class DeliveryController {
 
@@ -14,16 +16,14 @@ public class DeliveryController {
     private DeliveryService service;
 
     @RequestMapping(method = RequestMethod.GET, value = "/delivery")
-    public String getAllDeliverys() {
+    public ResponseEntity<List<Delivery>> getAllDeliveries() {
 
-        Gson gson = new Gson();
-        return gson.toJson(service.getDeliveries());
+        return ResponseEntity.ok(service.getDeliveries());
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/delivery/{id}")
     public ResponseEntity<Delivery> getDeliveryById(@PathVariable("id") Long id) {
 
-        Gson gson = new Gson();
         return ResponseEntity.ok(service.getDelivery(id));
     }
 
@@ -47,6 +47,21 @@ public class DeliveryController {
         } else {
             return ResponseEntity.ok(d);
         }
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/delivery/{id}/report")
+    public ResponseEntity<Delivery> updateDeliveryStatus(@RequestBody Delivery d, @PathVariable("id") Long id) {
+
+        Delivery og = service.getDelivery(id);
+
+        if (og == null) {
+            return ResponseEntity.notFound().build();
+        }
+        if (!d.getNotes().isEmpty()) og.setNotes(d.getNotes());
+        if (d.getStatus() != null) og.setStatus(d.getStatus());
+
+        og = this.service.update(og);
+        return og == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(og);
     }
 
 }

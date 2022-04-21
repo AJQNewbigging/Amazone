@@ -27,6 +27,9 @@ public class Delivery {
     @ManyToOne
     private Package packag;
 
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
     private String notes;
 
 }

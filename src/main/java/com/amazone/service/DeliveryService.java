@@ -29,7 +29,9 @@ public class DeliveryService {
     }
 
     public Delivery save(Delivery d) {
-        return this.repo.save(d);
+        Long id = this.repo.save(d).getId();
+
+        return this.getDelivery(id);
     }
 
 }

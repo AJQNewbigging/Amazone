@@ -49,4 +49,18 @@ public class VehicleController {
         }
     }
 
+    @RequestMapping(method = RequestMethod.PUT, value = "/vehicle/{id}/report")
+    public ResponseEntity<Vehicle> reportVehicleById(@RequestBody Vehicle v, @PathVariable("id") Long id) {
+        Vehicle og = service.getVehicle(id);
+
+        if (og == null) {
+            return ResponseEntity.notFound().build();
+        }
+        if (v.getVCondition() != null) og.setVCondition(v.getVCondition());
+
+        og = this.service.update(og);
+        return og == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(og);
+    }
+
+
 }
